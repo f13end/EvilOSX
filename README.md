@@ -1,6 +1,6 @@
 <h1 align="center">
   <br>
-  <a href="https://github.com/Marten4n6/EvilOSX"><img src="/data/images/logo.png?raw=true" alt="EvilOSX" width="280"></a>
+  <a href="https://github.com/Marten4n6/EvilOSX"><img src="/data/images/logo.png?raw=true" alt="Logo" width="280"></a>
   <br>
   EvilOSX
   <br>
@@ -10,13 +10,19 @@
 
 <p align="center">
   <a href="https://github.com/Marten4n6/EvilOSX/blob/master/LICENSE.txt">
-      <img src="https://img.shields.io/badge/license-GPLv3-blue.svg?style=flat-square">
+      <img src="https://img.shields.io/badge/license-GPLv3-blue.svg?style=flat-square" alt="License">
+  </a>
+  <a href="https://github.com/Marten4n6/EvilOSX/blob/master/LICENSE.txt">
+      <img src="https://img.shields.io/badge/python-2.7,%203.7-blue.svg?style=flat-square" alt="Python">
   </a>
   <a href="https://github.com/Marten4n6/EvilOSX/issues">
-    <img src="https://img.shields.io/github/issues/Marten4n6/EvilOSX.svg?style=flat-square">
+    <img src="https://img.shields.io/github/issues/Marten4n6/EvilOSX.svg?style=flat-square" alt="Issues">
+  </a>
+  <a href="https://travis-ci.org/Marten4n6/EvilOSX">
+      <img src="https://img.shields.io/travis/Marten4n6/EvilOSX/master.svg?style=flat-square" alt="Build Status">
   </a>
   <a href="https://github.com/Marten4n6/EvilOSX/blob/master/CONTRIBUTING.md">
-      <img src="https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat-square">
+      <img src="https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat-square" alt="Contributing">
   </a>
 </p>
 
@@ -41,43 +47,41 @@
 
 ## How To Use
 
-### Normal users
-The **server** side requires [python3](https://www.python.org/downloads) to run. <br/>
-The **bot** side is written in python2 which is already installed on macOS / OS X. <br/><br/>
-Once python3 is installed, open a terminal and type the following:
-
 ```bash
 # Clone or download this repository
 $ git clone https://github.com/Marten4n6/EvilOSX
 
-# Install dependencies required by the server
-$ sudo pip3 install -r requirements.txt
-
 # Go into the repository
 $ cd EvilOSX
 
-# Start listening for connections
-$ python3 start.py
+# Install dependencies required by the server
+$ sudo pip install -r requirements.txt
 
-# Lastly, run the built launcher (see the builder tab) on your target(s)
+# Start the GUI
+$ python start.py
+
+# Lastly, run a built launcher on your target(s)
 ```
+
 **Warning:** Because payloads are created unique to the target system (automatically by the server), the server must be running when any bot connects for the first time.
 
 ### Advanced users
-There is also a command line interface for those who want to use this over SSH:
+
+There's also a CLI for those who want to use this over SSH:
 ```bash
 # Create a launcher to infect your target(s)
-$ python3 builder.py
+$ python start.py --builder
 
-# Start listening for connections
-$ python3 start.py --cli --port 1337
+# Start the CLI
+$ python start.py --cli --port 1337
 
-# Lastly, run the built launcher on your target(s)
+# Lastly, run a built launcher on your target(s)
 ```
 
 ## Screenshots
-![GUI](https://i.imgur.com/qw3k4z4.png)
+
 ![CLI](https://i.imgur.com/DGYCQMl.png)
+![GUI](https://i.imgur.com/qw3k4z4.png)
 
 ## Motivation
 This project was created to be used with my [Rubber Ducky](https://hakshop.com/products/usb-rubber-ducky-deluxe), here's the simple script:
@@ -102,7 +106,8 @@ ENTER
 ```
 - It takes about 10 seconds to backdoor any unlocked Mac, which is...... *nice*
 - Termina**l** is spelt that way intentionally, on some systems spotlight won't find the terminal otherwise. <br/>
-- To bypass the keyboard setup assistant make sure you change the VID&PID which can be found [here](https://ducktoolkit.com/vidpid/). Aluminum Keyboard (ISO) is probably the one you are looking for.
+- To bypass the keyboard setup assistant make sure you change the VID&PID which can be found [here](https://ducktoolkit.com/vidpid/). <br/>
+  Aluminum Keyboard (ISO) is probably the one you are looking for.
 
 
 ## Versioning
@@ -134,14 +139,15 @@ For more information on SemVer, please visit https://semver.org/.
 Feel free to submit any issues or feature requests [here](https://github.com/Marten4n6/EvilOSX/issues).
 
 ## Contributing
-Contributions are very welcome! For a simple guide on how to create modules, click [here](https://github.com/Marten4n6/EvilOSX/blob/master/CONTRIBUTING.md).
+For a simple guide on how to create modules click [here](https://github.com/Marten4n6/EvilOSX/blob/master/CONTRIBUTING.md).
 
 ## Credits
 - The awesome [Empire](https://github.com/EmpireProject) project
 - Shoutout to [Patrick Wardle](https://twitter.com/patrickwardle) for his awesome talks, check out [Objective-See](https://objective-see.com/)
-- [manwhoami](https://github.com/manwhoami) for his projects: [OSXChromeDecrypt](https://github.com/manwhoami/OSXChromeDecrypt), [MMeTokenDecrypt](https://github.com/manwhoami/MMeTokenDecrypt), [iCloudContacts](https://github.com/manwhoami/iCloudContacts)
+- manwhoami for his projects: OSXChromeDecrypt, MMeTokenDecrypt, iCloudContacts <br/>
+  (now deleted... let me know if you reappear)
 - The slowloris module is pretty much copied from [PySlowLoris](https://github.com/ProjectMayhem/PySlowLoris)
-- [urwid](http://urwid.org/) and [this code](https://github.com/izderadicka/xmpp-tester/blob/master/commander.py) which saved me a lot of time with the GUI
+- [urwid](http://urwid.org/) and [this code](https://github.com/izderadicka/xmpp-tester/blob/master/commander.py) which saved me a lot of time with the CLI
 - Logo created by [motusora](https://www.behance.net/motusora)
 
 ## License

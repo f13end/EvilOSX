@@ -22,7 +22,7 @@ from server.modules.helper import *
 
 
 class Module(ModuleABC):
-    def get_info(self) -> dict:
+    def get_info(self):
         return {
             "Author:": ["Marten4n6"],
             "Description": "Speak to the bot via text to speech.",
@@ -30,8 +30,8 @@ class Module(ModuleABC):
             "Stoppable": False
         }
 
-     def get_setup_messages() -> List[str]:
-        """Messages presented to the user to enter.
+     def get_setup_messages():
+        """Setup messages which will be presented to the user.
 
         In this example we'll ask the user for the message they want
         text to speech to speak to the bot.
@@ -40,7 +40,7 @@ class Module(ModuleABC):
             "Message to speak (Leave empty for \"Hello world!\"): "
         ]
 
-    def setup(self, set_options: list) -> Tuple[bool, Optional[dict]]:
+    def setup(self, set_options):
         """Called after all options have been set."""
         message = set_options[0]
 
@@ -58,7 +58,7 @@ Now this module will be picked up by the server (you can see this by starting th
 ### Bot
 Now let's make our module actually do something...
 
-The second file should be under the [bot](https://github.com/Marten4n6/EvilOSX/tree/master/server/modules/bot) directory and be called the same as the server side. <br/>
+The second file should be under the [bot](https://github.com/Marten4n6/EvilOSX/tree/master/server/modules/bot) directory and named the same as the server side. <br/>
 Every module must contain the following function:
 ```python
 def run(options):
@@ -70,7 +70,7 @@ It's useful to know that this dictionary always contains the following keys: <br
 ```"server_host", "server_port", "program_directory"```
 
 Anything printed by a module will **directly** be returned to the server's ```process_response``` method. <br/>
-Optionally, the dictionary returned by the server's ```setup``` method may have a "response_options" key which is then also sent back to this function.
+Optionally, the dictionary returned by the server's ```setup``` method may have a "response_options" key which is then also sent back to this method.
 
 Here's the bot side of our example:
 ```python
@@ -85,4 +85,4 @@ def run(options):
 ```
 
 ##
-Feel free to submit an [issue](https://github.com/Marten4n6/EvilOSX/issues) if you have any further questions.
+Feel free to submit an [issue](https://github.com/Marten4n6/EvilOSX/issues) or send me an email if you have any further questions.
